@@ -6,22 +6,24 @@ class AbsenceHelper
 {
     public static function getAbsenceReport($absence)
     {
-        $startClockInStr = '08:00';
+        $absenceDate = $absence->created_at;
+
+        $startClockInStr = $absenceDate->format('Y-m-d') . ' 08:00:00';
         $startClockIn = \Carbon\Carbon::parse($startClockInStr);
-        $startClockOutStr = '17:00';
+        $startClockOutStr = $absenceDate->format('Y-m-d') . ' 17:00:00';
         $startClockOut = \Carbon\Carbon::parse($startClockOutStr);
 
         $lateInMinutes = null;
         if ($absence && $absence->clock_in && $absence->clock_in > $startClockIn) {
             $clockIn = \Carbon\Carbon::parse($absence->clock_in);
-            $lateInMinutes = $startClockIn->diffInMinutes($clockIn);    
+            $lateInMinutes = $startClockIn->diffInMinutes($clockIn);
         }
 
         $overtimeInMinutes = null;
         if ($absence && $absence->clock_out && $absence->clock_out > $startClockOut) {
             $clockOut = \Carbon\Carbon::parse($absence->clock_out);
             $overtimeInMinutes = $startClockOut->diffInMinutes($clockOut);
-        } 
+        }
 
         $earlyClockOutInMinutes = null;
         if ($absence && $absence->clock_out && $absence->clock_out < $startClockOut) {
