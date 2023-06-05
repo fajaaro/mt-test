@@ -31,11 +31,16 @@ class HomeController extends Controller
 
         $startClockInStr = '08:00';
         $startClockOutStr = '17:00';
+        $lateInMinutes = null;
+        $overtimeInMinutes = null;
+        $earlyClockOutInMinutes = null;
 
-        $data = AbsenceHelper::getAbsenceReport($todayAbsence);
-        $lateInMinutes = $data['late_in_minutes'];
-        $overtimeInMinutes = $data['overtime_in_minutes'];
-        $earlyClockOutInMinutes = $data['early_clock_out_in_minutes'];
+        if ($todayAbsence != null) {
+            $data = AbsenceHelper::getAbsenceReport($todayAbsence);
+            $lateInMinutes = $data['late_in_minutes'];
+            $overtimeInMinutes = $data['overtime_in_minutes'];
+            $earlyClockOutInMinutes = $data['early_clock_out_in_minutes'];    
+        }
 
         return view('home', compact('todayAbsence', 'startClockInStr', 'startClockOutStr', 'lateInMinutes', 'overtimeInMinutes', 'earlyClockOutInMinutes'));
     }
